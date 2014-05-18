@@ -150,14 +150,10 @@ class Util
             // support for exceptional clients who can't set the header
             $m = strtoupper($_REQUEST[Defaults::$httpMethodOverrideProperty]);
             if ($m == 'PUT' || $m == 'DELETE' ||
-                $m == 'POST' || $m == 'PATCH'
+                $m == 'POST' || $m == 'PATCH' || $m == 'HEAD'
             ) {
                 $method = $m;
             }
-        }
-        // support for HEAD request
-        if ($method == 'HEAD') {
-            $method = 'GET';
         }
         return $method;
     }
