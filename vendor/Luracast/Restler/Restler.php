@@ -515,9 +515,18 @@ class Restler extends EventDispatcher
 
     public function getRequestStream()
     {
-        $rawInput = fopen('php://input', 'r');
         $tempStream = fopen('php://temp', 'r+');
-        stream_copy_to_stream($rawInput, $tempStream);
+        if (
+            !empty(Defaults::$httpPostBodyOverrideProperty)
+            && !empty(Defaults::$httpMethodOverrideProperty)
+            && isset($_REQUEST[Defaults::$httpMethodOverrideProperty])
+            && isset($_REQUEST[Defaults::$httpPostBodyOverrideProperty])
+        ) {
+            fwrite($tempStream, $_REQUEST[Defaults::$httpPostBodyOverrideProperty]);
+        } else {
+            $rawInput = fopen('php://input', 'r');
+            stream_copy_to_stream($rawInput, $tempStream);
+        }
         rewind($tempStream);
         return $tempStream;
     }

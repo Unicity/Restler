@@ -127,6 +127,14 @@ class Defaults
     public static $httpMethodOverrideProperty = 'http_method';
 
     /**
+     * @var string name of the property that can sent through $_GET or $_POST to
+     *             override the http body of the request. Set it to null or
+     *             blank string to disable http body override through request
+     *             parameters.
+     */
+    public static $httpPostBodyOverrideProperty = 'http_body';
+
+    /**
      * @var bool should auto validating api parameters should be enabled by
      *           default or not. Set this to false to avoid validation.
      */
