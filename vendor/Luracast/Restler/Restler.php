@@ -977,7 +977,11 @@ class Restler extends EventDispatcher
                     $o->methodName
                 ), $o->parameters);
         }
-        $this->responseData = $result;
+        if ($this->requestMethod == 'HEAD') {
+            $this->responseData = null;
+        } else {
+            $this->responseData = $result;
+        }
     }
 
     protected function compose()
