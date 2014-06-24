@@ -37,8 +37,13 @@ class JsFormat extends JsonFormat
             static::$callbackMethodName
                 = (string) $_GET[static::$callbackOverrideQueryString];
         }
-        return static::$callbackMethodName . '('
-            . parent::encode($r, $human_readable) . ');';
+
+	if (static::$callbackMethodName) {
+		return static::$callbackMethodName . '('
+		    . parent::encode($r, $human_readable) . ');';
+	} else {
+		return parent::encode($r, $human_readable);
+	}	
     }
 
     public function isReadable()
