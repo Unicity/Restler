@@ -38,6 +38,10 @@ class JsFormat extends JsonFormat
                 = (string) $_GET[static::$callbackOverrideQueryString];
         }
 
+        @header(
+            "{$_SERVER['SERVER_PROTOCOL']} 200 "
+        );
+
 	if (static::$callbackMethodName) {
 		return static::$callbackMethodName . '('
 		    . parent::encode($r, $human_readable) . ');';
