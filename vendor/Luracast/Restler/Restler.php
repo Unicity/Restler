@@ -978,7 +978,7 @@ class Restler extends EventDispatcher
                 ), $o->parameters);
         }
         if ($this->requestMethod == 'HEAD') {
-            $this->responseData = null;
+            $this->responseData = '';
         } else {
             $this->responseData = $result;
         }
@@ -1063,6 +1063,9 @@ class Restler extends EventDispatcher
         @header(
             "{$_SERVER['SERVER_PROTOCOL']} $code " .
             (isset(RestException::$codes[$code]) ? RestException::$codes[$code] : '')
+        );
+        @header(
+            "X-Status-Code: " . $code
         );
     }
 
