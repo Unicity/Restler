@@ -992,13 +992,15 @@ class Restler extends EventDispatcher
          * @var iCompose Default Composer
          */
         $compose = Scope::get(Defaults::$composeClass);
-        $this->responseData = is_null($this->responseData) &&
-        Defaults::$emptyBodyForNullResponse
-            ? ''
-            : $this->responseFormat->encode(
-                $compose->response($this->responseData),
-                !$this->productionMode
-            );
+	if (get_resource_type($this->responseData) == null) {
+		$this->responseData = is_null($this->responseData) &&
+		Defaults::$emptyBodyForNullResponse
+		    ? ''
+		    : $this->responseFormat->encode(
+			$compose->response($this->responseData),
+			!$this->productionMode
+		    );
+	}
     }
 
     public function composeHeaders(RestException $e = null)
@@ -1079,7 +1081,12 @@ class Restler extends EventDispatcher
                 usleep(1e6 * (Defaults::$throttle / 1e3 - $elapsed));
             }
         }
-        echo $this->responseData;
+	if (get_resource_type($this->responseData) == null) {
+        	echo $this->responseData;
+	}
+	else {
+		stream_copy_to_stream($this->responseData, fopen('php://output', 'w'));
+	}
         $this->dispatch('complete');
         if ($this->responseCode == 401)
             @header('WWW-Authenticate: ' . (@$this->authClasses[0]->__getWWWAuthenticateString() ? : 'Custom'), false);
