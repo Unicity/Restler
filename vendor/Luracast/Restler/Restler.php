@@ -992,7 +992,7 @@ class Restler extends EventDispatcher
          * @var iCompose Default Composer
          */
         $compose = Scope::get(Defaults::$composeClass);
-	if (get_resource_type($this->responseData) == null) {
+	if (@get_resource_type($this->responseData) == null) {
 		$this->responseData = is_null($this->responseData) &&
 		Defaults::$emptyBodyForNullResponse
 		    ? ''
@@ -1081,7 +1081,7 @@ class Restler extends EventDispatcher
                 usleep(1e6 * (Defaults::$throttle / 1e3 - $elapsed));
             }
         }
-	if (get_resource_type($this->responseData) == null) {
+	if (@get_resource_type($this->responseData) == null) {
         	echo $this->responseData;
 	}
 	else {
