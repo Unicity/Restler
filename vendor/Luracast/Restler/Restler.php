@@ -1086,6 +1086,8 @@ class Restler extends EventDispatcher
 	}
 	else {
 		stream_copy_to_stream($this->responseData, fopen('php://output', 'w'));
+		ob_flush();
+		flush();
 	}
         $this->dispatch('complete');
         if ($this->responseCode == 401)
