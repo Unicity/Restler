@@ -1100,6 +1100,7 @@ class Restler extends EventDispatcher
         $this->dispatch('message');
 
         if (!$exception instanceof RestException) {
+            $this->dispatch('genericexception', $exception);
             $exception = new RestException(
                 500,
                 $this->productionMode ? null : $exception->getMessage(),
