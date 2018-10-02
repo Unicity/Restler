@@ -280,7 +280,12 @@ class CommentParser
                 $value[self::$embeddedDataName]
                     += $data[$param][self::$embeddedDataName];
             }
-            $data[$param] = $value + $data[$param];
+			if (!is_array($data[$param])) {
+				$data[$param] = array('description' => (string) $data[$param]);
+			}
+			if (is_array($value)) {
+				$data[$param] = $value + $data[$param];
+			}
         }
     }
 
