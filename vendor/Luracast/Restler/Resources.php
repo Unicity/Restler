@@ -1,7 +1,8 @@
 <?php
 namespace Luracast\Restler;
 
-use Luracast\Restler\Data\String;
+use Luracast\Restler\Data\Text;
+use Luracast\Restler\Scope;
 use stdClass;
 
 /**
@@ -225,14 +226,14 @@ class Resources implements iUseAuthentication, iProvideMultiVersionApi
                     continue;
                 }
                 $fullPath = $route['url'];
-                if ($fullPath !== $target && !String::beginsWith($fullPath, $target)) {
+                if ($fullPath !== $target && !Text::beginsWith($fullPath, $target)) {
                     continue;
                 }
                 $fLen = strlen($fullPath);
                 if ($tSlash) {
-                    if ($fLen != $tLen && !String::beginsWith($fullPath, $target . '/'))
+                    if ($fLen != $tLen && !Text::beginsWith($fullPath, $target . '/'))
                         continue;
-                } elseif ($fLen > $tLen + 1 && $fullPath{$tLen + 1} != '{' && !String::beginsWith($fullPath, '{')) {
+                } elseif ($fLen > $tLen + 1 && $fullPath{$tLen + 1} != '{' && !Text::beginsWith($fullPath, '{')) {
                     //when mapped to root exclude paths that have static parts
                     //they are listed else where under that static part name
                     continue;
@@ -245,7 +246,7 @@ class Resources implements iUseAuthentication, iProvideMultiVersionApi
                     if (empty($exclude)) {
                         if ($fullPath == $exclude)
                             continue 2;
-                    } elseif (String::beginsWith($fullPath, $exclude)) {
+                    } elseif (Text::beginsWith($fullPath, $exclude)) {
                         continue 2;
                     }
                 }
@@ -453,8 +454,8 @@ class Resources implements iUseAuthentication, iProvideMultiVersionApi
         $r->apiVersion = (string)$this->restler->_requestedApiVersion;
         $r->swaggerVersion = "1.1";
         $r->basePath = $this->restler->getBaseUrl();
-        $r->produces = $this->restler->getProducedMimeTypes();
-        $r->consumes = $this->restler->getConsumedMimeTypes();
+        $r->produces = $this->restler->getWritableMimeTypes();
+        $r->consumes = $this->restler->getReadableMimeTypes();
         $r->apis = array();
         return $r;
     }
@@ -690,7 +691,7 @@ class Resources implements iUseAuthentication, iProvideMultiVersionApi
                     $defaultObject->$name = '';
                 }
             }
-            $r->defaultValue = (defined('JSON_PRETTY_PRINT')) ? json_encode($defaultObject, JSON_PRETTY_PRINT) : json_encode($defaultObject);
+            $r->defaultValue = Scope::get('JsonFormat')->encode($defaultObject, true);
         }
         $r->paramType = 'body';
         $r->allowMultiple = false;
@@ -800,9 +801,9 @@ class Resources implements iUseAuthentication, iProvideMultiVersionApi
      * Find the data type of the given value.
      *
      *
-     * @param mixed $o              given value for finding type
+     * @param mixed $o given value for finding type
      *
-     * @param bool  $appendToModels if an object is found should we append to
+     * @param bool $appendToModels if an object is found should we append to
      *                              our models list?
      *
      * @return string
@@ -891,7 +892,7 @@ class Resources implements iUseAuthentication, iProvideMultiVersionApi
         }
         $this->_mapResources($allRoutes, $map, $version);
         foreach ($map as $path => $description) {
-            if (!String::contains($path, '{')) {
+            if (!Text::contains($path, '{')) {
                 //add id
                 $r->apis[] = array(
                     'path' => $path . $this->formatString,
@@ -923,6 +924,7 @@ class Resources implements iUseAuthentication, iProvideMultiVersionApi
         curl_setopt($ch, CURLOPT_HTTPHEADER, array(
             'Accept:application/json',
         ));
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);        
         $result = json_decode(curl_exec($ch));
         $http_status = (int)curl_getinfo($ch, CURLINFO_HTTP_CODE);
         return array($http_status, $result);
@@ -933,7 +935,7 @@ class Resources implements iUseAuthentication, iProvideMultiVersionApi
         foreach ($allRoutes as $fullPath => $routes) {
             $path = explode('/', $fullPath);
             $resource = isset($path[0]) ? $path[0] : '';
-            if ($resource == 'resources' || String::endsWith($resource, 'index'))
+            if ($resource == 'resources' || Text::endsWith($resource, 'index'))
                 continue;
             foreach ($routes as $httpMethod => $route) {
                 if (in_array($httpMethod, static::$excludedHttpMethods)) {
@@ -947,7 +949,7 @@ class Resources implements iUseAuthentication, iProvideMultiVersionApi
                     if (empty($exclude)) {
                         if ($fullPath == $exclude)
                             continue 2;
-                    } elseif (String::beginsWith($fullPath, $exclude)) {
+                    } elseif (Text::beginsWith($fullPath, $exclude)) {
                         continue 2;
                     }
                 }
@@ -983,6 +985,9 @@ class Resources implements iUseAuthentication, iProvideMultiVersionApi
      */
     protected function verifyAccess($route)
     {
+        if ($route['accessLevel'] < 2) {
+            return true;
+        }
         if (
             static::$hideProtected
             && !$this->_authenticated

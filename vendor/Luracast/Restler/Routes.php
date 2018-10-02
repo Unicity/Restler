@@ -2,7 +2,7 @@
 namespace Luracast\Restler;
 
 use Luracast\Restler\Data\ApiMethodInfo;
-use Luracast\Restler\Data\String;
+use Luracast\Restler\Data\Text;
 use ReflectionClass;
 use ReflectionMethod;
 use ReflectionProperty;
@@ -103,9 +103,10 @@ class Routes
             if (!isset($metadata['param'])) {
                 $metadata['param'] = array();
             }
-            if (isset($metadata['return']['type']) && $qualified = Scope::resolve($metadata['return']['type'], $scope)) {
-                list($metadata['return']['type'], $metadata['return']['children']) =
-                    static::getTypeAndModel(new ReflectionClass($qualified), $scope);
+            if (isset($metadata['return']['type'])) {
+                if ($qualified = Scope::resolve($metadata['return']['type'], $scope))
+                    list($metadata['return']['type'], $metadata['return']['children']) =
+                        static::getTypeAndModel(new ReflectionClass($qualified), $scope);
             } else {
                 //assume return type is array
                 $metadata['return']['type'] = 'array';
@@ -124,20 +125,20 @@ class Routes
                 $m ['name'] = $param->getName();
                 if (empty($m['label']))
                     $m['label'] = static::label($m['name']);
-                if ($m['name'] == 'email' && empty($m[CommentParser::$embeddedDataName]['type']))
-                    $m[CommentParser::$embeddedDataName]['type'] = 'email';
-                $m ['default'] = $defaults [$position];
-                $m ['required'] = !$param->isOptional();
                 if (is_null($type) && isset($m['type'])) {
                     $type = $m['type'];
                 }
+                if ($m['name'] == 'email' && empty($m[CommentParser::$embeddedDataName]['type']) && $type == 'string')
+                    $m[CommentParser::$embeddedDataName]['type'] = 'email';
+                $m ['default'] = $defaults [$position];
+                $m ['required'] = !$param->isOptional();
                 $contentType = Util::nestedValue(
                     $m,
                     CommentParser::$embeddedDataName,
                     'type'
                 );
                 if ($contentType && $qualified = Scope::resolve($contentType, $scope)) {
-                    list($contentType, $children) = static::getTypeAndModel(
+                    list($m[CommentParser::$embeddedDataName]['type'], $children) = static::getTypeAndModel(
                         new ReflectionClass($qualified), $scope
                     );
                 }
@@ -229,15 +230,10 @@ class Routes
                             strpos($url, ':' . $p['name']);
                         if ($inPath) {
                             $copy['metadata']['param'][$i][CommentParser::$embeddedDataName]['from'] = 'path';
-                        } elseif (
-                            !isset($p[CommentParser::$embeddedDataName]['from']) ||
-                            $p[CommentParser::$embeddedDataName]['from'] == 'path'
-                        ) {
-                            $copy['metadata']['param'][$i][CommentParser::$embeddedDataName]['from'] =
-                                $httpMethod == 'GET' ||
-                                $httpMethod == 'DELETE'
-                                    ? 'query'
-                                    : 'body';
+                        } elseif ($httpMethod == 'GET' || $httpMethod == 'DELETE') {
+                            $copy['metadata']['param'][$i][CommentParser::$embeddedDataName]['from'] = 'query';
+                        } elseif ($p[CommentParser::$embeddedDataName]['from'] == 'path') {
+                            $copy['metadata']['param'][$i][CommentParser::$embeddedDataName]['from'] = 'body';
                         }
                     }
                     $url = preg_replace_callback('/{[^}]+}|:[^\/]+/',
@@ -555,7 +551,7 @@ class Routes
                 $name = $prop->getName();
                 $child = array('name' => $name);
                 if ($c = $prop->getDocComment()) {
-                    $child += Util::nestedValue(CommentParser::parse($c), 'var');
+                    $child += Util::nestedValue(CommentParser::parse($c), 'var') ?: array();
                 } else {
                     $o = $class->newInstance();
                     $p = $prop->getValue($o);
@@ -591,12 +587,12 @@ class Routes
                 $children[$name] = $child;
             }
         } catch (Exception $e) {
-            if (String::endsWith($e->getFile(), 'CommentParser.php')) {
+            if (Text::endsWith($e->getFile(), 'CommentParser.php')) {
                 throw new RestException(500, "Error while parsing comments of `$className` class. " . $e->getMessage());
             }
             throw $e;
         }
-        static::$models[$className] = array($class->getName(), $children);
+        static::$models[$className] = array($className, $children);
         return static::$models[$className];
     }
 

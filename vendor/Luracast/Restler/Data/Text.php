@@ -11,7 +11,7 @@ namespace Luracast\Restler\Data;
  * @license    http://www.opensource.org/licenses/lgpl-license.php LGPL
  * @link       http://luracast.com/products/restler/
  */
-class String
+class Text
 {
     /**
      * Given haystack contains the needle or not?
@@ -72,6 +72,13 @@ class String
      */
     public static function title($name)
     {
-        return ucfirst(preg_replace(array('/(?<=[^A-Z])([A-Z])/', '/(?<=[^0-9])([0-9])/'), ' $0', $name));
+        return
+            ucwords(
+                preg_replace(
+                    array('/(?<=[^A-Z])([A-Z])/', '/(?<=[^0-9])([0-9])/', '/(_)/'),
+                    array(' $0', ' $0', ' '),
+                    $name
+                )
+            );
     }
 } 
