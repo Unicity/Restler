@@ -635,7 +635,7 @@ class Restler extends EventDispatcher
     protected function negotiate()
     {
         $this->dispatch('negotiate');
-        //$this->negotiateCORS();
+        $this->negotiateCORS();
         $this->responseFormat = $this->negotiateResponseFormat();
         $this->negotiateCharset();
         $this->negotiateLanguage();
