@@ -470,10 +470,14 @@ class Validator implements iValidate
                     return $r;
 
                 case 'string' :
-                    if (!is_string($input)) {
-                        $error .= '. Expecting alpha numeric value';
-                        break;
-                    }
+					if (!is_string($input)) {
+						if ($info->fix) {
+							$input = strval($input);
+						} else {
+							$error .= '. Expecting alpha numeric value';
+							break;
+						}
+					}
                     if ($info->required && $input === '') {
                         $error = "$name is required.";
                         break;
@@ -516,7 +520,7 @@ class Validator implements iValidate
                             if ($contentType == 'indexed') {
                                 $input = $info->filterArray($input, true);
                             } elseif ($contentType == 'associative') {
-                                $input = $info->filterArray($input, true);
+                                $input = $info->filterArray($input, false);
                             }
                         } elseif (
                             $contentType == 'indexed' &&

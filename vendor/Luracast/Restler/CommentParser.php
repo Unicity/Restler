@@ -273,19 +273,10 @@ class CommentParser
                 $value
             );
             $data[$param] = $arr;
-        } else {
-            if (!is_string($value) && isset($value[self::$embeddedDataName])
-                && isset($data[$param][self::$embeddedDataName])
-            ) {
-                $value[self::$embeddedDataName]
-                    += $data[$param][self::$embeddedDataName];
-            }
-			if (!is_array($data[$param])) {
-				$data[$param] = array('description' => (string) $data[$param]);
-			}
-			if (is_array($value)) {
-				$data[$param] = $value + $data[$param];
-			}
+        } elseif (!is_string($value) && isset($value[self::$embeddedDataName]) &&
+                  isset($data[$param][self::$embeddedDataName])) {
+            $value[self::$embeddedDataName] += $data[$param][self::$embeddedDataName];
+            $data[$param] = $value + $data[$param];
         }
     }
 
