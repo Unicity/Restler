@@ -1266,16 +1266,15 @@ class Restler extends EventDispatcher
                     }
                 }
                 //versioned api
-                if (false !== ($index = strrpos($className, '\\'))) {
-                    $name = substr($className, 0, $index)
-                        . '\\v{$version}' . substr($className, $index);
-                } else if (false !== ($index = strrpos($className, '_'))) {
-                    $name = substr($className, 0, $index)
-                        . '_v{$version}' . substr($className, $index);
-                } else {
+                //if (false !== ($index = strrpos($className, '\\'))) {
+                //    $name = substr($className, 0, $index)
+                //        . '\\v{$version}' . substr($className, $index);
+                //} else if (false !== ($index = strrpos($className, '_'))) {
+                //    $name = substr($className, 0, $index)
+                //        . '_v{$version}' . substr($className, $index);
+                //} else {
                     $name = 'v{$version}\\' . $className;
-                }
-
+                //}
                 for ($version = $this->apiMinimumVersion;
                      $version <= $this->apiVersion;
                      $version++) {
