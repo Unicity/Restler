@@ -198,7 +198,7 @@ class Resources implements iUseAuthentication, iProvideMultiVersionApi
         } elseif (false !== ($pos = strpos($id, '-v'))) {
             //$version = intval(substr($id, $pos + 2));
             $id = substr($id, 0, $pos);
-        } elseif ($id{0} == 'v' && is_numeric($v = substr($id, 1))) {
+        } elseif ($id[0] == 'v' && is_numeric($v = substr($id, 1))) {
             $id = '';
             //$version = $v;
         } elseif ($id == 'root' || $id == 'index') {
@@ -275,7 +275,7 @@ class Resources implements iUseAuthentication, iProvideMultiVersionApi
                 if (count($parts) == 1 && $httpMethod == 'GET') {
                 } else {
                     for ($i = 0; $i < count($parts); $i++) {
-                        if (strlen($parts[$i]) && $parts[$i]{0} == '{') {
+                        if (strlen($parts[$i]) && $parts[$i][0] == '{') {
                             $pos = $i - 1;
                             break;
                         }
@@ -924,7 +924,7 @@ class Resources implements iUseAuthentication, iProvideMultiVersionApi
         curl_setopt($ch, CURLOPT_HTTPHEADER, array(
             'Accept:application/json',
         ));
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);        
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
         $result = json_decode(curl_exec($ch));
         $http_status = (int)curl_getinfo($ch, CURLINFO_HTTP_CODE);
         return array($http_status, $result);
