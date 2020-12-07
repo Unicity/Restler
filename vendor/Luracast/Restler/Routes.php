@@ -114,7 +114,7 @@ class Routes
             foreach ($params as $param) {
                 $children = array();
                 $type =
-                    $param->isArray() ? 'array' : $param->getClass();
+                    static::isArray($param) ? 'array' : static::getClass($param);
                 $arguments[$param->getName()] = $position;
                 $defaults[$position] = $param->isDefaultValueAvailable() ?
                     $param->getDefaultValue() : null;
@@ -295,6 +295,16 @@ class Routes
             }
         }
     }
+
+    private static function isArray($param) {
+		return $param->getType() && $param->getType()->getName() === 'array';
+	}
+
+	private static function getClass($param) {
+		return $param->getType() && !$param->getType()->isBuiltin()
+			? new ReflectionClass($param->getType()->getName())
+			: null;
+	}
 
     /**
      * @access private

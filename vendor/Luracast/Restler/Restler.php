@@ -1005,7 +1005,7 @@ class Restler extends EventDispatcher
          * @var iCompose Default Composer
          */
         $compose = Scope::get(Defaults::$composeClass);
-	if (@get_resource_type($this->responseData) == null) {
+	if (!is_resource($this->responseData) || @get_resource_type($this->responseData) == null) {
 		$this->responseData = is_null($this->responseData) &&
 		Defaults::$emptyBodyForNullResponse
 		    ? ''
@@ -1100,7 +1100,7 @@ class Restler extends EventDispatcher
 				: 'Custom';
 			@header('WWW-Authenticate: ' . $authString, false);
 		}
-		if (@get_resource_type($this->responseData) == null) {
+		if (!is_resource($this->responseData) || @get_resource_type($this->responseData) == null) {
 			echo $this->responseData;
 		}
 		else {
