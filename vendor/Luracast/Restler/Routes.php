@@ -113,6 +113,16 @@ class Routes
             }
             foreach ($params as $param) {
                 $children = array();
+                /*
+				$reflection_type = $param->getType();
+				if ($reflection_type === null) {
+					$type = null;
+				} elseif ($reflection_type->isBuiltin()) {
+					$type = $reflection_type->getName();
+				} else {
+					$type = new ReflectionClass($reflection_type->getName());
+				}
+                */
                 $type =
                     static::isArray($param) ? 'array' : static::getClass($param);
                 $arguments[$param->getName()] = $position;
