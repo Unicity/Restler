@@ -12,7 +12,7 @@ namespace Luracast\Restler {
  * @subpackage helper
  * @author     Nick Lombard <github@jigsoft.co.za>
  * @copyright  2012 Luracast
- * @version    3.0.0rc5
+ *
  */
 class AutoLoader
 {
@@ -145,7 +145,7 @@ class AutoLoader
                     ))
                     if ('composer' == end($includePath) &&
                         false !== $classmapPath = stream_resolve_include_path(
-                            "{$path}{$slash}autoload_classmap.php"
+                            "$path{$slash}autoload_classmap.php"
                         )
                     ) {
                         static::seen(static::loadFile(
@@ -154,7 +154,7 @@ class AutoLoader
                         $paths = array_merge(
                             $paths,
                             array_values(static::loadFile(
-                                "{$path}{$slash}autoload_namespaces.php"
+                                "$path{$slash}autoload_namespaces.php"
                             ))
                         );
                     } else
@@ -263,7 +263,7 @@ class AutoLoader
      * @return bool false unless className now exists
      */
     private function loadLastResort($className, $loader = null) {
-        $loaders = array_unique(static::$rogueLoaders,  SORT_REGULAR);
+        $loaders = array_unique(static::$rogueLoaders);
         if (isset($loader)) {
             if (false === array_search($loader, $loaders))
                 static::$rogueLoaders[] = $loader;
@@ -285,11 +285,20 @@ class AutoLoader
      *
      * @return bool false unless className exists
      */
-    private function loadThisLoader($className, $loader) {
-        if (is_callable($loader)
-            && false !== $file = $loader($className)
-            && $this->exists($className, $loader))
+    private function loadThisLoader($className, $loader)
+    {
+        if (is_array($loader)
+            && is_callable($loader)) {
+            $b = new $loader[0];
+            if (false !== $file = $b::$loader[1]($className)
+                    && $this->exists($className, $b::$loader[1])) {
                 return $file;
+            }
+        } elseif (is_callable($loader)
+            && false !== $file = $loader($className)
+                && $this->exists($className, $loader)) {
+            return $file;
+        }
         return false;
     }
 
@@ -301,6 +310,8 @@ class AutoLoader
      */
     private function alias($className, $currentClass)
     {
+        if ($className == 'Luracast\Restler\string') return;
+        if ($className == 'Luracast\Restler\mixed') return;
         if ($className != $currentClass
             && false !== strpos($className, $currentClass))
                 if (!class_exists($currentClass, false)
@@ -435,3 +446,4 @@ namespace {
         return include $path;
     }
 }
+
