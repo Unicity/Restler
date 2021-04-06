@@ -1,7 +1,5 @@
 # behat.yml
 default:
-  suites:
-    default:
-      contexts:
-        - RestContext:
-            - http://localhost/r3/
+    context:
+        parameters:
+            base_url: http://localhost/restler/public
