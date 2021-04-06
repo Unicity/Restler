@@ -131,7 +131,6 @@
             <li><a href="../_008_documentation/readme.html" title="Commenting can be more rewarding">Documentation</a></li>
             <li><a href="../_009_rate_limiting/readme.html" title="Abuse no more">Rate Limiting</a></li>
             <li><a href="../_010_access_control/readme.html" title="Who can do what">Access Control</a></li>
-            <li><a href="../_011_versioning/readme.html" title="using the URL">Versioning</a></li>
             <li><a href="../_012_vendor_mime/readme.html" title="custom media type for versioning">Vendor MIME</a></li>
             <li><a href="../_013_html/readme.html" title="rendering custom views">Html Format</a></li>
             <li><a href="../_014_oauth2_client/readme.html" title="to consume protected API">OAuth2 Client</a></li>
@@ -224,7 +223,7 @@
 
 <li><tag title="Vendor Example(s)" data-content="&lt;a href=&quot;../_012_vendor_mime/readme.html&quot;&gt;Vendor MIME&lt;/a&gt;">vendor</tag></li>
 
-<li><tag title="Versioning Example(s)" data-content="&lt;a href=&quot;../_011_versioning/readme.html&quot;&gt;Versioning&lt;/a&gt; &lt;a href=&quot;../_012_vendor_mime/readme.html&quot;&gt;Vendor MIME&lt;/a&gt;">versioning</tag><badge>2</badge></li>
+<li><tag title="Versioning Example(s)" data-content="&lt;a href=&quot;../_012_vendor_mime/readme.html&quot;&gt;Vendor MIME&lt;/a&gt;">versioning</tag></li>
 
 <li><tag title="View Example(s)" data-content="&lt;a href=&quot;../_013_html/readme.html&quot;&gt;Html Format&lt;/a&gt;">view</tag></li>
 
@@ -232,8 +231,8 @@
 </ul>
     </nav>
     <article id="page">
-<div class="right"><small>12</small></div>
-<p><a id="vendor-mime" class="anchor"></a><h2>Vendor MIME <requires>PHP >= 5.3</requires></h2></p>
+<div class="right"><small>11</small></div>
+<p><a id="vendor-mime" class="anchor"></a><h2>Vendor MIME <requires>PHP >= 5.4</requires></h2></p>
 
 <p><tag>versioning</tag>
  <tag>mime</tag>
@@ -371,6 +370,51 @@ Content-Type: application/vnd.SomeVendor-v2+json; charset=utf-8
   }
 }
 
+</code></pre>
+
+<p>We expect the following behaviour from this example.</p>
+
+<pre><code class="gherkin"><br />@example12 @versioning
+Feature: Testing Versioning with vendor MIME
+
+  Scenario: Access version 1 by vendor media type
+    Given that "Accept" header is set to "application/vnd.SomeVendor-v1+json"
+    When I request "examples/_012_vendor_mime/bmi?height=190"
+    Then the response status code should be 200
+    And the response "Content-Type" header should be "application/vnd.SomeVendor-v1+json; charset=utf-8"
+    And the response is JSON
+    And the type is "array"
+    And the response has a "bmi" property
+    And the "message" property equals "Normal weight"
+    And the "metric.height" property equals "190 centimeters"
+
+  Scenario: Access version 2 by vendor media type and passing invalid argument
+    Given that "Accept" header is set to "application/vnd.SomeVendor-v2+json"
+    When I request "examples/_012_vendor_mime/bmi?height=190"
+    Then the response status code should be 400
+    And the response "Content-Type" header should be "application/vnd.SomeVendor-v2+json; charset=utf-8"
+    And the response is JSON
+    And the type is "array"
+    And the "error.message" property equals "Bad Request: invalid height unit"
+
+  Scenario: Access version 2 by vendor media type
+    Given that "Accept" header is set to "application/vnd.SomeVendor-v2+json"
+    When I request "examples/_012_vendor_mime/bmi?height=190cm"
+    Then the response status code should be 200
+    And the response "Content-Type" header should be "application/vnd.SomeVendor-v2+json; charset=utf-8"
+    And the response is JSON
+    And the type is "array"
+    And the response has a "bmi" property
+    And the "message" property equals "Normal weight"
+    And the "metric.height" property equals "190 centimeters"
+
+</code></pre>
+
+<p>It can be tested by running the following command on terminal/command line
+from the project root (where the vendor folder resides). Make sure <code>base_url</code>
+in <code>behat.yml</code> is updated according to your web server.</p>
+
+<pre><code class="bash">bin/behat  features/examples/_012_vendor_mime.feature
 </code></pre>
 
 </article>

@@ -1,6 +1,6 @@
 ## Hello World Example 
 
- This example requires `PHP >= 5.3` 
+ This example requires `PHP >= 5.4` 
 
 <tag>basic`
 
@@ -40,10 +40,10 @@ GET [say/hello?to=R.Arul%20Kumaran](say/hello?to=R.Arul%20Kumaran)
 "Hello R.Arul Kumaran!"
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-GET [say/hi?to=restler3.0](say/hi?to=restler3.0)
+GET [say/hi?to=restler3.1](say/hi?to=restler3.1)
 :    
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-"Hi restler3.0!"
+"Hi restler3.1!"
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
@@ -65,10 +65,10 @@ GET [index.php/say/hello?to=R.Arul%20Kumaran](index.php/say/hello?to=R.Arul%20Ku
 "Hello R.Arul Kumaran!"
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-GET [index.php/say/hi?to=restler3.0](index.php/say/hi?to=restler3.0)
+GET [index.php/say/hi?to=restler3.1](index.php/say/hi?to=restler3.1)
 :    
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-"Hi restler3.0!"
+"Hi restler3.1!"
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
@@ -82,7 +82,7 @@ We expect the following behaviour from this example.
 Feature: Testing Helloworld Example
 
   Scenario: Saying Hello world
-    When I request "/examples/_001_helloworld/say/hello"
+    When I request "examples/_001_helloworld/say/hello"
     Then the response status code should be 200
     And the response is JSON
     And the type is "string"
@@ -90,31 +90,32 @@ Feature: Testing Helloworld Example
 
   Scenario: Saying Hello Restler
     Given that "to" is set to "Restler"
-    When I request "/examples/_001_helloworld/say/hello{?to}"
+    When I request "examples/_001_helloworld/say/hello{?to}"
     Then the response status code should be 200
     And the response is JSON
     And the type is "string"
     And the value equals "Hello Restler!"
 
   Scenario: Saying
-    When I request "/examples/_001_helloworld/say"
+    When I request "examples/_001_helloworld/say"
     Then the response status code should be 404
     And the response is JSON
     And the type is "array"
 
   Scenario: Saying Hi
-    When I request "/examples/_001_helloworld/say/hi"
+    When I request "examples/_001_helloworld/say/hi"
     Then the response status code should be 400
     And the response is JSON
     And the type is "array"
 
   Scenario: Saying Hi Arul
     Given that "to" is set to "Arul"
-    When I request "/examples/_001_helloworld/say/hi{?to}"
+    When I request "examples/_001_helloworld/say/hi{?to}"
     Then the response status code should be 200
     And the response is JSON
     And the type is "string"
     And the value equals "Hi Arul!"
+
 ```
 
 It can be tested by running the following command on terminal/command line

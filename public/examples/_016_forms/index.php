@@ -2,7 +2,7 @@
 /*
  Tagline: to capture user input
  Tags: form, validation, blade, html, bootstrap, foundation, emmet
- Requires: PHP >= 5.3
+ Requires: PHP >= 5.4
 
  Description:
 
@@ -76,27 +76,40 @@ See bootstrap3.blade.php and foundation5.blade.php
 $loader = include '../../../vendor/autoload.php';
 $loader->setUseIncludePath(true);
 
-use Luracast\Restler\Restler;
-use Luracast\Restler\Defaults;
+use Luracast\Restler\Data\Validator;
 use Luracast\Restler\Format\HtmlFormat;
+use Luracast\Restler\Restler;
 use Luracast\Restler\UI\Forms;
 use Luracast\Restler\UI\FormStyles;
 
 HtmlFormat::$viewPath = __DIR__ . '/views';
 HtmlFormat::$template = 'blade';
+Validator::$holdException = true;
 
 $themes = array(
-    'amelia', 'cerulean', 'cosmo',
-    'cyborg', 'darkly', 'flatly',
-    'journal', 'lumen', 'readable',
-    'simplex', 'slate', 'spacelab',
-    'superhero', 'united', 'yeti',
+    'cerulean',
+    'cosmo',
+    'cyborg',
+    'darkly',
+    'flatly',
+    'journal',
+    'lumen',
+    'paper',
+    'readable',
+    'sandstone',
+    'simplex',
+    'slate',
+    'spacelab',
+    'superhero',
+    'united',
+    'yeti',
 );
 $theme = isset($_GET['theme']) ? $_GET['theme'] : $themes[array_rand($themes, 1)];
-$style = $theme == 'foundation5' ? 'foundation5' : 'bootstrap3';
+$style = $theme === 'foundation5' ? 'Foundation5' : 'Bootstrap3';
+$class = 'Luracast\\Restler\\UI\\' . $style . 'Form';
+Forms::setStyles(new $class);
+$style = strtolower($style);
 HtmlFormat::$data += compact('theme', 'themes', 'style');
-
-Forms::$style = FormStyles::$$style;
 
 $r = new Restler();
 $r->setSupportedFormats('HtmlFormat');

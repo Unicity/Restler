@@ -3,7 +3,7 @@
  Title: CRUD
  Tagline: using POST, GET, PUT and DELETE
  Tags: create, retrieve, read, update, delete, post, get, put, routing
- Requires: PHP >= 5.3
+ Requires: PHP >= 5.4
  Description: Create, Retrieve, Update and Delete using
  HTTP methods POST, GET, PUT and DELETE respectively.
 
@@ -46,9 +46,9 @@ But since the session wont be working, next request wont reflect the
 change done by previous request, anyway you get the idea. You may use any of the following files
 instead of Session.php to get full functionality.
 
-> * SerializedFile.php (helper)
-> * Sqlite.php (helper)
-> * MySQL.php (helper)
+> * MySQLDataProvider.php (helper)
+> * SqliteDataProvider.php (helper)
+> * SerializedFileDataProvider.php (helper)
 
 by un-commenting the respective line in Authors.php and commenting others.
 
@@ -153,14 +153,13 @@ Content-Type: application/json
 }
 ```
 
- Helpers: DB\Session
+ Helpers: SessionDataProvider
 
  Content:
 
-*[MySQL.php]: _007_crud/DB/PDO/MySQL.php
-*[Sqlite.php]: _007_crud/DB/PDO/Sqlite.php
-*[SerializedFile.php]: _007_crud/DB/SerializedFile.php
-
+*[MySQLDataProvider.php]: common/MySQLDataProvider.php
+*[SqliteDataProvider.php]: common/SqliteDataProvider.php
+*[SerializedFileDataProvider.php]: common/SerializedFileDataProvider.php
 */
 require_once '../../../vendor/restler.php';
 use Luracast\Restler\Restler;

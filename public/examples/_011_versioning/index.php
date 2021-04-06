@@ -3,7 +3,7 @@
 Title: Versioning
 Tagline: using the URL
 Tags: versioning
-Requires: PHP >= 5.3
+Requires: PHP >= 5.4
 Description:
 This example shows how to version your API using namespace. Restler supports
 both url based versioning (this example) and vendor specific media type
@@ -39,7 +39,7 @@ Which will be `Luracast\WeightManagement\v2` for this example
 
 If a class remains the same across few versions of the api, we can implement
 `iProvideMultiVersionApi` interface which is simply defining `__getMaximumSupportedVersion`
-method which returns the maximum supported version. Take a look at `Resources`
+method which returns the maximum supported version. Take a look at `Explorer`
 class for a sample implementation.
 
 Try this example and the version differences in the explorer [here](explorer/index.html#!/v2)
@@ -110,5 +110,5 @@ Defaults::$useUrlBasedVersioning = true;
 $r = new Restler();
 $r->setAPIVersion(2);
 $r->addAPIClass('BMI');
-$r->addAPIClass('Resources');
+$r->addAPIClass('Explorer');
 $r->handle();

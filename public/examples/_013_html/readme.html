@@ -131,7 +131,6 @@
             <li><a href="../_008_documentation/readme.html" title="Commenting can be more rewarding">Documentation</a></li>
             <li><a href="../_009_rate_limiting/readme.html" title="Abuse no more">Rate Limiting</a></li>
             <li><a href="../_010_access_control/readme.html" title="Who can do what">Access Control</a></li>
-            <li><a href="../_011_versioning/readme.html" title="using the URL">Versioning</a></li>
             <li><a href="../_012_vendor_mime/readme.html" title="custom media type for versioning">Vendor MIME</a></li>
             <li><a href="../_013_html/readme.html" title="rendering custom views">Html Format</a></li>
             <li><a href="../_014_oauth2_client/readme.html" title="to consume protected API">OAuth2 Client</a></li>
@@ -224,7 +223,7 @@
 
 <li><tag title="Vendor Example(s)" data-content="&lt;a href=&quot;../_012_vendor_mime/readme.html&quot;&gt;Vendor MIME&lt;/a&gt;">vendor</tag></li>
 
-<li><tag title="Versioning Example(s)" data-content="&lt;a href=&quot;../_011_versioning/readme.html&quot;&gt;Versioning&lt;/a&gt; &lt;a href=&quot;../_012_vendor_mime/readme.html&quot;&gt;Vendor MIME&lt;/a&gt;">versioning</tag><badge>2</badge></li>
+<li><tag title="Versioning Example(s)" data-content="&lt;a href=&quot;../_012_vendor_mime/readme.html&quot;&gt;Vendor MIME&lt;/a&gt;">versioning</tag></li>
 
 <li><tag title="View Example(s)" data-content="&lt;a href=&quot;../_013_html/readme.html&quot;&gt;Html Format&lt;/a&gt;">view</tag></li>
 
@@ -232,8 +231,8 @@
 </ul>
     </nav>
     <article id="page">
-<div class="right"><small>13</small></div>
-<p><a id="html-format" class="anchor"></a><h2>Html Format <requires>PHP >= 5.3</requires></h2></p>
+<div class="right"><small>12</small></div>
+<p><a id="html-format" class="anchor"></a><h2>Html Format <requires>PHP >= 5.4</requires></h2></p>
 
 <p><tag>view</tag>
  <tag>html</tag>
@@ -298,10 +297,11 @@ full path of a folder</p>
 <pre><code>GET    resources              ⇠ Luracast\Restler\Resources::index()
 GET    resources/verifyaccess ⇠ Luracast\Restler\Resources::verifyAccess()
 GET    resources/{id}         ⇠ Luracast\Restler\Resources::get()
-POST   tasks                  ⇠ Tasks::post()
 GET    tasks                  ⇠ Tasks::index()
-PATCH  tasks/{id}             ⇠ Tasks::patch()
+POST   tasks                  ⇠ Tasks::post()
+PATCH  tasks/reset            ⇠ Tasks::patchReset()
 GET    tasks/{id}             ⇠ Tasks::get()
+PATCH  tasks/{id}             ⇠ Tasks::patch()
 DELETE tasks/{id}             ⇠ Tasks::delete()
 </code></pre>
 
@@ -331,6 +331,67 @@ which is Supported without any external dependencies</p>
 <p>Just to show that it is possible to come up with API as well as an App using the
 same resource and url, you can try the json version of the tasks api using the
 API Explorer <a href="explorer/index.html" target="_blank">here</a></p>
+
+<p>We expect the following behaviour from this example.</p>
+
+<pre><code class="gherkin"><br />@example13 @html
+Feature: Testing Html
+
+  Scenario: Resetting data to begin tests
+    When I request "PATCH examples/_013_html/tasks/reset"
+    Then the response status code should be 200
+    And the response is JSON
+    And the value equals true
+
+  Scenario: Getting Html response
+    When I request "examples/_013_html/tasks.html"
+    Then the response status code should be 200
+    And the response is HTML
+
+  Scenario: Getting Json response
+    When I request "examples/_013_html/tasks.json"
+    Then the response status code should be 200
+    And the response is JSON
+
+  Scenario: Getting Html response for a tag
+    When I request "examples/_013_html/tasks/1.html"
+    Then the response status code should be 200
+    And the response is HTML
+
+  Scenario: Getting Json response for a tag
+    When I request "examples/_013_html/tasks/2.json"
+    Then the response status code should be 200
+    And the response is JSON
+
+  Scenario: Deleting a task
+    Given that I want to delete a "Task"
+    And its "id" is 1
+    When I request "examples/_013_html/tasks/{id}.json"
+    Then the response status code should be 200
+    And the response should be JSON
+    And the response has an "id" property
+
+  Scenario: Getting Html response for a missing tag
+    When I request "examples/_013_html/tasks/1.html"
+    Then the response status code should be 404
+    And the response is HTML
+
+  Scenario: Getting Json response for a deleted tag
+    When I request "examples/_013_html/tasks/1.json"
+    Then the response status code should be 404
+    And the response is JSON
+    And the response has a "error" property
+
+
+
+</code></pre>
+
+<p>It can be tested by running the following command on terminal/command line
+from the project root (where the vendor folder resides). Make sure <code>base_url</code>
+in <code>behat.yml</code> is updated according to your web server.</p>
+
+<pre><code class="bash">bin/behat  features/examples/_013_html.feature
+</code></pre>
 
 </article>
 <footer>
