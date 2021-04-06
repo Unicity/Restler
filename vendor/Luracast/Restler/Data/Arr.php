@@ -10,6 +10,7 @@ namespace Luracast\Restler\Data;
  * @copyright  2010 Luracast
  * @license    http://www.opensource.org/licenses/lgpl-license.php LGPL
  * @link       http://luracast.com/products/restler/
+ *
  */
 class Arr
 {
