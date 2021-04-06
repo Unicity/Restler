@@ -233,7 +233,7 @@ class Resources implements iUseAuthentication, iProvideMultiVersionApi
                 if ($tSlash) {
                     if ($fLen != $tLen && !Text::beginsWith($fullPath, $target . '/'))
                         continue;
-                } elseif ($fLen > $tLen + 1 && $fullPath{$tLen + 1} != '{' && !Text::beginsWith($fullPath, '{')) {
+                } elseif ($fLen > $tLen + 1 && $fullPath[$tLen + 1] != '{' && !Text::beginsWith($fullPath, '{')) {
                     //when mapped to root exclude paths that have static parts
                     //they are listed else where under that static part name
                     continue;
@@ -768,7 +768,7 @@ class Resources implements iUseAuthentication, iProvideMultiVersionApi
                     CommentParser::$embeddedDataName,
                     'type'
                 ) ? :
-                    (count($value)
+					((is_array($value) || $value instanceof \Countable) && count($value)
                         ? $this->getType(end($value), true)
                         : 'string');
                 if (class_exists($itemType)) {
