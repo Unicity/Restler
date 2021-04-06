@@ -145,7 +145,7 @@ class AutoLoader
                     ))
                     if ('composer' == end($includePath) &&
                         false !== $classmapPath = stream_resolve_include_path(
-                            "$path{$slash}autoload_classmap.php"
+                            "{$path}{$slash}autoload_classmap.php"
                         )
                     ) {
                         static::seen(static::loadFile(
@@ -154,7 +154,7 @@ class AutoLoader
                         $paths = array_merge(
                             $paths,
                             array_values(static::loadFile(
-                                "$path{$slash}autoload_namespaces.php"
+                                "{$path}{$slash}autoload_namespaces.php"
                             ))
                         );
                     } else
@@ -435,4 +435,3 @@ namespace {
         return include $path;
     }
 }
-
