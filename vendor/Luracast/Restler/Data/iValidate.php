@@ -21,7 +21,7 @@ interface iValidate {
      *            data that needs to be validated
      * @param ValidationInfo $info
      *            information to be used for validation
-     * @return boolean false in case of failure or fixed value in the expected
+     * @return array|bool|float|int|mixed|null|number|string false in case of failure or fixed value in the expected
      *         type
      * @throws \Luracast\Restler\RestException 400 with information about the
      * failed
