@@ -132,7 +132,7 @@ class Routes
                     $metadata['param'][$position] = array();
                 }
                 $m = & $metadata ['param'] [$position];
-                $m ['name'] = $param->getName();
+                $m['name'] = $param->getName();
                 if (empty($m['label']))
                     $m['label'] = static::label($m['name']);
                 if (is_null($type) && isset($m['type'])) {
@@ -140,8 +140,8 @@ class Routes
                 }
                 if ($m['name'] == 'email' && empty($m[CommentParser::$embeddedDataName]['type']) && $type == 'string')
                     $m[CommentParser::$embeddedDataName]['type'] = 'email';
-                $m ['default'] = $defaults [$position];
-                $m ['required'] = !$param->isOptional();
+                $m['default'] = $defaults[$position];
+                $m['required'] = !$param->isOptional();
                 $contentType = Util::nestedValue(
                     $m,
                     CommentParser::$embeddedDataName,
@@ -306,11 +306,11 @@ class Routes
         }
     }
 
-    private static function isArray($param) {
+    public static function isArray($param) {
 		return $param->getType() && $param->getType()->getName() === 'array';
 	}
 
-	private static function getClass($param) {
+	public static function getClass($param) {
 		return $param->getType() && !$param->getType()->isBuiltin()
 			? new ReflectionClass($param->getType()->getName())
 			: null;
@@ -556,9 +556,9 @@ class Routes
      * @throws \Exception
      * @return array
      *
-     * @access protected
+     * @access public
      */
-    protected static function getTypeAndModel(ReflectionClass $class, array $scope)
+    public static function getTypeAndModel(ReflectionClass $class, array $scope)
     {
         $className = $class->getName();
         if (isset(static::$models[$className])) {
