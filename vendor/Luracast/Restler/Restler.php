@@ -438,7 +438,7 @@ class Restler extends EventDispatcher
             $_SERVER['SCRIPT_NAME']
                 = '/' . Util::removeCommonPath($_SERVER['SCRIPT_FILENAME'], $_SERVER['DOCUMENT_ROOT']);
 
-        $fullPath = urldecode($_SERVER['REQUEST_URI']);
+        $fullPath = urldecode($_SERVER['REQUEST_URI'] ?? '');
         $path = Util::removeCommonPath(
             $fullPath,
             $_SERVER['SCRIPT_NAME']
@@ -702,7 +702,7 @@ class Restler extends EventDispatcher
         $format = null;
         $extensions = explode(
             '.',
-            parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH)
+            parse_url($_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH)
         );
         while ($extensions) {
             $extension = array_pop($extensions);

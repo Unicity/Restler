@@ -154,7 +154,7 @@ class Explorer implements iProvideMultiVersionApi
         $filename = str_replace(array('../', './', '\\', '..', '.php'), '', $filename);
         $redirect = false;
         if (
-            (empty($filename) && substr($_SERVER['REQUEST_URI'], -1, 1) != '/') ||
+            (empty($filename) && substr($_SERVER['REQUEST_URI'] ?? '', -1, 1) != '/') ||
             $filename == 'index.html'
         ) {
             $status = 302;
