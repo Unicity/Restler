@@ -211,7 +211,7 @@ class Tags implements ArrayAccess, Countable
         return $this;
     }
 
-    public function offsetGet($index)
+    public function offsetGet(mixed $index): mixed
     {
         if ($this->offsetExists($index)) {
             return $this->children[$index];
@@ -219,12 +219,12 @@ class Tags implements ArrayAccess, Countable
         return false;
     }
 
-    public function offsetExists($index)
+    public function offsetExists($index): bool
     {
         return isset($this->children[$index]);
     }
 
-    public function offsetSet($index, $value)
+    public function offsetSet($index, $value): void
     {
         if ($index) {
             $this->children[$index] = $value;
@@ -242,14 +242,12 @@ class Tags implements ArrayAccess, Countable
             $this->markAsChildren($c);
             $this->children[] = $value;
         }
-        return true;
     }
 
-    public function offsetUnset($index)
+    public function offsetUnset($index): void
     {
         $this->children[$index]->_parent = null;
         unset($this->children[$index]);
-        return true;
     }
 
     public function getContents()
@@ -257,7 +255,7 @@ class Tags implements ArrayAccess, Countable
         return $this->children;
     }
 
-    public function count()
+    public function count(): int
     {
         return count($this->children);
     }
