@@ -15,7 +15,7 @@ class SimpleAuth implements iAuthenticate
         return 'Query name="key"';
     }
 
-    function key()
+    function key(): int|string|null
     {
         return SimpleAuth::KEY;
     }
