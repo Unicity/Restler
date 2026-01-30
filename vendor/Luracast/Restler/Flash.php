@@ -16,6 +16,7 @@ use Luracast\Restler\Format\HtmlFormat;
  * @link       http://luracast.com/products/restler/
  * @version    3.0.0rc5
  */
+#[\AllowDynamicProperties]
 class Flash //implements \JsonSerializable
 {
     const SUCCESS = 'success';

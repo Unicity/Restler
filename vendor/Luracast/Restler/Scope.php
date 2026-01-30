@@ -13,6 +13,7 @@ namespace Luracast\Restler;
  * @link       http://luracast.com/products/restler/
  * @version    3.0.0rc5
  */
+#[\AllowDynamicProperties]
 class Scope
 {
     public static $classAliases = array(
