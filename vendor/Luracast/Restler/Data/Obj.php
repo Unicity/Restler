@@ -13,6 +13,7 @@ namespace Luracast\Restler\Data;
  * @link       http://luracast.com/products/restler/
  *
  */
+#[\AllowDynamicProperties]
 class Obj
 {
     /**
