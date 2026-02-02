@@ -225,7 +225,7 @@ class Tags implements ArrayAccess, Countable
         return isset($this->children[$index]);
     }
 
-    public function offsetSet($index, $value): void
+    public function offsetSet(mixed $index, mixed $value): void
     {
         if ($index) {
             $this->children[$index] = $value;
@@ -245,7 +245,7 @@ class Tags implements ArrayAccess, Countable
         }
     }
 
-    public function offsetUnset($index): void
+    public function offsetUnset(mixed $index): void
     {
         $this->children[$index]->_parent = null;
         unset($this->children[$index]);
