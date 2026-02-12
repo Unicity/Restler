@@ -379,7 +379,7 @@ class RestContext extends BehatContext
             case 'application/xml':
                 $this->_type = 'xml';
                 @libxml_use_internal_errors(true);
-                if (\LIBXML_VERSION < 20900) {
+                if (\LIBXML_VERSION < 20900 && PHP_MAJOR_VERSION < 8) {
                     libxml_disable_entity_loader(true);
                 }
                 $this->_data = @simplexml_load_string(

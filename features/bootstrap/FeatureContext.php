@@ -19,6 +19,7 @@ Behat\Gherkin\Node\TableNode;
  */
 class FeatureContext extends BehatContext
 {
+    private $output;
     /**
      * Initializes context.
      * Every scenario gets it's own context object.

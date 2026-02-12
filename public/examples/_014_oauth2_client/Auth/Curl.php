@@ -53,7 +53,7 @@ class Curl
 
         if (!empty($parameters)) {
             if ('GET' === $httpMethod) {
-                $queryString = utf8_encode($this->buildQuery($parameters));
+                $queryString = $this->buildQuery($parameters);
                 $url .= '?' . $queryString;
             } elseif ('POST' === $httpMethod) {
                 $curlOptions += array(
@@ -81,7 +81,7 @@ class Curl
             CURLOPT_SSL_VERIFYPEER => $options['verifyssl'],
         );
 
-        if (ini_get('open_basedir') == '' && ini_get('safe_mode') != 'On') {
+        if (ini_get('open_basedir') == '') {
             $curlOptions[CURLOPT_FOLLOWLOCATION] = true;
         }
 
