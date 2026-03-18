@@ -147,6 +147,7 @@ class XmlFormat extends Format
                     }
                     $key = static::$defaultTagName;
                 }
+                $xmlKey = static::sanitizeElementName((string)$key);
                 $useNS = static::$useNamespaces
                     && !empty(static::$namespacedProperties[$key])
                     && false === strpos($key, ':');
@@ -157,22 +158,22 @@ class XmlFormat extends Format
                             $useNS
                                 ? $xml->startElementNs(
                                 static::$namespacedProperties[$key],
-                                $key,
+                                $xmlKey,
                                 null
                             )
-                                : $xml->startElement($key);
-                            $this->write($xml, $v, $key);
+                                : $xml->startElement($xmlKey);
+                            $this->write($xml, $v, $xmlKey);
                             $xml->endElement();
                         }
                     } else {
                         $useNS
                             ? $xml->startElementNs(
                             static::$namespacedProperties[$key],
-                            $key,
+                            $xmlKey,
                             null
                         )
-                            : $xml->startElement($key);
-                        $this->write($xml, $value, $key);
+                            : $xml->startElement($xmlKey);
+                        $this->write($xml, $value, $xmlKey);
                         $xml->endElement();
                     }
                     continue;
@@ -180,17 +181,17 @@ class XmlFormat extends Format
                     $value = $value ? 'true' : 'false';
                 }
                 if (isset($attributes[$key])) {
-                    $xml->writeAttribute($useNS ? static::$namespacedProperties[$key] . ':' . $key : $key, $value);
+                    $xml->writeAttribute($useNS ? static::$namespacedProperties[$key] . ':' . $xmlKey : $xmlKey, $value);
                 } else {
                     $useNS
                         ?
                         $xml->startElementNs(
                             static::$namespacedProperties[$key],
-                            $key,
+                            $xmlKey,
                             null
                         )
-                        : $xml->startElement($key);
-                    $this->write($xml, $value, $key);
+                        : $xml->startElement($xmlKey);
+                    $this->write($xml, $value, $xmlKey);
                     $xml->endElement();
                 }
             }
@@ -332,6 +333,11 @@ class XmlFormat extends Format
             );
         }
         return $r;
+    }
+
+    private static function sanitizeElementName(string $name): string
+    {
+        return str_replace('@', '_', $name);
     }
 
     public static function setType($value)
