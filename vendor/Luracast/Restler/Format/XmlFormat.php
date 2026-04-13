@@ -335,6 +335,17 @@ class XmlFormat extends Format
         return $r;
     }
 
+    /**
+     * Sanitize a key so it is a valid XML element name.
+     *
+     * Some API responses include locale-suffixed keys (e.g. "fullName@fr")
+     * produced by Unicity's localization layer. The '@' character is not
+     * allowed in XML names and causes XMLWriter::startElement() to throw a
+     * fatal error. Replacing '@' with '_' keeps the output well-formed
+     * while preserving readability.
+     *
+     * @see https://app.clickup.com/t/86cwqr1f2  API-11050
+     */
     private static function sanitizeElementName(string $name): string
     {
         return str_replace('@', '_', $name);
