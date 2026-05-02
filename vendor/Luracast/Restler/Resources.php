@@ -620,7 +620,7 @@ class Resources implements iUseAuthentication, iProvideMultiVersionApi
                         array_keys($c->properties))
                     . "\": \"\"\n}";
                 return $r;
-            } elseif (false !== ($p = strpos($n[0]->dataType, '['))) {
+            } elseif (false !== ($p = strpos((string) $n[0]->dataType, '['))) {
                 // ============ array of custom class ===============
                 $r = $n[0];
                 $t = substr($r->dataType, $p + 1, -1);
