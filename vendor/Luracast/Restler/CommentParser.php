@@ -409,7 +409,7 @@ class CommentParser
 
     private function formatReturn(array $value)
     {
-        $data = explode('|', array_shift($value));
+        $data = explode('|', (string) array_shift($value));
         $r = array(
             'type' => count($data) == 1 ? $data[0] : $data
         );
