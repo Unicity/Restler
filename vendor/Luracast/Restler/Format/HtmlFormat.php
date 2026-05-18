@@ -374,7 +374,7 @@ class HtmlFormat extends Format
                 }
             }
             if (method_exists($class = get_called_class(), $template)) {
-                return call_user_func("$class::$template", $data, $humanReadable);
+                return call_user_func([$class, $template], $data, $humanReadable);
             }
             throw new RestException(500, "Unsupported template system `$template`");
         } catch (Exception $e) {

@@ -13,6 +13,7 @@ namespace Luracast\Restler\Data;
  * @link       http://luracast.com/products/restler/
  *
  */
+#[\AllowDynamicProperties]
 class Obj
 {
     /**
@@ -121,7 +122,7 @@ class Obj
                 }
                 $value = self::toArray($value, $forceObjectTypeWhenEmpty);
                 if (self::$stringEncoderFunction && is_string($value)) {
-                    $value = self::$encoderFunctionName ($value);
+                    $value = self::$stringEncoderFunction ($value);
                 } elseif (self::$numberEncoderFunction && is_numeric($value)) {
                     $value = self::$numberEncoderFunction ($value);
                 }

@@ -32,6 +32,7 @@ use Luracast\Restler\Util;
  * @method static Tags button() creates a html button element
  *
  */
+#[\AllowDynamicProperties]
 class Tags implements ArrayAccess, Countable
 {
     public static $humanReadable = true;
@@ -219,12 +220,12 @@ class Tags implements ArrayAccess, Countable
         return false;
     }
 
-    public function offsetExists($index): bool
+    public function offsetExists(mixed $index): bool
     {
         return isset($this->children[$index]);
     }
 
-    public function offsetSet($index, $value): void
+    public function offsetSet(mixed $index, mixed $value): void
     {
         if ($index) {
             $this->children[$index] = $value;
@@ -244,7 +245,7 @@ class Tags implements ArrayAccess, Countable
         }
     }
 
-    public function offsetUnset($index): void
+    public function offsetUnset(mixed $index): void
     {
         $this->children[$index]->_parent = null;
         unset($this->children[$index]);

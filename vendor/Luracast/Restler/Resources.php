@@ -17,6 +17,7 @@ use stdClass;
  * @link       http://luracast.com/products/restler/
  * @version    3.0.0rc5
  */
+#[\AllowDynamicProperties]
 class Resources implements iUseAuthentication, iProvideMultiVersionApi
 {
     /**

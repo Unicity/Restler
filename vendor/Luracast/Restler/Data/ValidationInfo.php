@@ -17,6 +17,7 @@ use Luracast\Restler\Util;
  * @link       http://luracast.com/products/restler/
  *
  */
+#[\AllowDynamicProperties]
 class ValidationInfo implements iValueObject
 {
     /**

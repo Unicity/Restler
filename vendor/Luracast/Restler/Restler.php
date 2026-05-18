@@ -23,6 +23,7 @@ use Luracast\Restler\Format\UrlEncodedFormat;
  * @link       http://luracast.com/products/restler/
  * @version    3.0.0rc5
  */
+#[\AllowDynamicProperties]
 class Restler extends EventDispatcher
 {
     const VERSION = '3.0.0rc5';
@@ -1016,7 +1017,7 @@ class Restler extends EventDispatcher
 	}
     }
 
-    public function composeHeaders(RestException $e = null)
+    public function composeHeaders(?RestException $e = null)
     {
         //only GET method should be cached if allowed by API developer
         $expires = $this->requestMethod == 'GET' ? Defaults::$headerExpires : 0;
@@ -1274,7 +1275,7 @@ class Restler extends EventDispatcher
                 //    $name = substr($className, 0, $index)
                 //        . '_v{$version}' . substr($className, $index);
                 //} else {
-                    $name = 'v{$version}\\' . $className;
+                    $name = 'v' . $version . '\\' . $className;
                 //}
                 for ($version = $this->apiMinimumVersion;
                      $version <= $this->apiVersion;

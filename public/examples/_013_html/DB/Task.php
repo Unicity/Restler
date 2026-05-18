@@ -48,7 +48,7 @@ class Task implements iValueObject, JsonSerializable
         return "Task(id = $this->id, position = $this->position, text = $this->text)";
     }
 
-    public function jsonSerialize()
+    public function jsonSerialize(): mixed
     {
         return (array)$this;
     }
