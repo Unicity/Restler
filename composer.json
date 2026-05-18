@@ -33,7 +33,7 @@
         "bshaffer/oauth2-server-php":"Restler can provide OAuth2 authentication using this library (see require-dev for details)"
     },
     "require":{
-        "php":">=5.3.0"
+        "php":">=8.1"
     },
     "require-dev":{
         "luracast/explorer":"*",
@@ -43,8 +43,6 @@
         "zendframework/zendamf":"dev-master",
         "symfony/yaml":"*",
         "mustache/mustache": "dev-master",
-        "twig/twig": "v1.13.0",
-        "illuminate/view": "4.2.*",
         "bshaffer/oauth2-server-php":"v1.0"
     },
     "repositories":[
